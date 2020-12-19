@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
-
 }
 
 android {
@@ -10,8 +9,8 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.example.finalproject"
-        minSdkVersion 30
+        applicationId "com.example.an_ntut_lovebus"
+        minSdkVersion 16
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -28,7 +27,6 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-
     }
     kotlinOptions {
         jvmTarget = '1.8'
@@ -42,17 +40,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation 'com.squareup.okhttp:okhttp:2.5.0'
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.24.0"
-//    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.24.0"
-
-}
-
-kotlin {
-    experimental {
-        coroutines 'enable'
-    }
+    implementation 'com.google.android.material:material:1.1.0'
 }
