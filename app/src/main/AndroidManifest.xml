@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalproject">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 取使用者網路權限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 取使用者粗略位置 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,7 +13,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Finalproject">
-        <activity android:name=".search_bus"></activity>
+        <activity android:name=".BusStopFind2"></activity>
+        <activity android:name=".BusStopFind1" />
+        <activity android:name=".search_bus" />
+
+        <!--add-->
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
+        <!--add-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCIG8fDzcpQG1aMpnivHFTJXsXSqWcwYPE" /> <!-- google map金鑰 -->
+        <!--add-->
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
