@@ -1,6 +1,7 @@
 package com.example.finalproject
 
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -16,6 +17,9 @@ import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_bus_information.*
 
 class BusInformation : AppCompatActivity() {
+    companion object {
+        public lateinit var dbrw: SQLiteDatabase
+    }
     var pos = ""
     private var viewPageAdapter = ViewPagerAdapter(supportFragmentManager)
     private lateinit var stop: Stop
@@ -25,7 +29,10 @@ class BusInformation : AppCompatActivity() {
         val actionbar = supportActionBar
         actionbar!!.title = "公車動態介面"
         actionbar.setDisplayHomeAsUpEnabled(true)
-
+        //取得資料庫實體
+        dbrw = FavoriteSQLiteOpenHelper(this).writableDatabase
+        //TODO:測試用
+        FavoriteSQLiteOpenHelper(this).onUpgrade(dbrw,0,1)
         //從地圖點站牌切換過來
         //TODO:之後用Intent + Bundle來取得站牌資訊stop的pos
 
@@ -43,6 +50,8 @@ class BusInformation : AppCompatActivity() {
         var tabStart = TimeFragment()
         val bundleStart = Bundle()
         bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
+        bundleStart.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
+        bundleStart.putString("Dir","往起點")
         tabStart.arguments = bundleStart
         //TODO:往[API拿地點]
         viewPageAdapter.addFragment(tabStart, "往起點")
@@ -51,6 +60,8 @@ class BusInformation : AppCompatActivity() {
         var tabEnd = TimeFragment()
         val bundleEnd = Bundle()
         bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
+        bundleEnd.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
+        bundleEnd.putString("Dir","往終點")
         tabEnd.arguments = bundleEnd
         viewPageAdapter.addFragment(tabEnd, "往終點")
 
@@ -98,6 +109,8 @@ class BusInformation : AppCompatActivity() {
         var tabStart = TimeFragment()
         val bundleStart = Bundle()
         bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
+        bundleStart.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
+        bundleStart.putString("Dir","往起點")
         tabStart.arguments = bundleStart
         //TODO:往[API拿地點]
         viewPageAdapter.changeFragment(0,tabStart, "往起點")
@@ -106,6 +119,8 @@ class BusInformation : AppCompatActivity() {
         var tabEnd = TimeFragment()
         val bundleEnd = Bundle()
         bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
+        bundleEnd.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
+        bundleEnd.putString("Dir","往終點")
         tabEnd.arguments = bundleEnd
         viewPageAdapter.changeFragment(1,tabEnd, "往終點")
 
