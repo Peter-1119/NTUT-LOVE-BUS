@@ -1,5 +1,6 @@
 package com.example.finalproject
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
@@ -65,6 +66,14 @@ class BusInformation : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val bus: String = parent?.getItemAtPosition(position).toString()
                 setToast(bus)
+                if (bus=="123"){
+                    var bundle = Bundle()
+                    bundle.putString("key","This is String")
+                    bundle.putInt("key1",1)
+                    var intent = Intent(this@BusInformation,Favorite::class.java)
+                    intent.putExtra("bundle",bundle)
+                    startActivity(intent)
+                }
                 Log.d("Tab","SpinnerSelected")
                 updateTab(stop,viewPageAdapter)
             }

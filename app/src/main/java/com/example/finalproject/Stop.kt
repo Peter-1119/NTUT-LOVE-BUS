@@ -2,7 +2,7 @@ package com.example.finalproject
 
 import android.util.Log
 
-public class Stop(pos: String) {
+class Stop(pos: String) {
     private val stopPos: String = pos
     private val api = API()
     val busList: MutableList<Bus> = mutableListOf()
