@@ -15,7 +15,7 @@ import com.example.finalproject.R
 import java.util.*
 
 class TimeFragment : Fragment() {
-    private lateinit var view2: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -26,9 +26,7 @@ class TimeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        view2=inflater.inflate(R.layout.fragment_time, container, false)
-
-        return view2
+        return inflater.inflate(R.layout.fragment_time, container, false)
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val data = arguments
@@ -46,7 +44,7 @@ class TimeFragment : Fragment() {
         val minStr=if (min<10) "0$min" else "$min"
         timeDeparture.text = String.format("若你想搭這班公車，請%d:%s出發", hour, minStr)
         //view==view??
-        var btnFavorite=view2.findViewById<ImageFilterButton>(R.id.btn_favorite)
+        var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
         btnFavorite?.setOnClickListener {
             try{
                 //新增一筆book與price資料進入myTable資料表
