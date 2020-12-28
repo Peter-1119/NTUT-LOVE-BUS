@@ -1,5 +1,7 @@
 package com.example.finalproject
 
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
@@ -12,6 +14,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.finalproject.fragments.TimeFragment
 import com.example.finalproject.fragments.adapters.ViewPagerAdapter
 import com.google.android.material.tabs.TabLayout
@@ -27,6 +30,7 @@ class BusInformation : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bus_information)
+
         val actionbar = supportActionBar
         actionbar!!.title = "公車動態介面"
         actionbar.setDisplayHomeAsUpEnabled(true)

@@ -18,6 +18,12 @@
         </activity>
         <activity android:name=".Favorite">
         </activity>
+        <!-- 當鬧鈴時間到達時要執行的程式 -->
+        <receiver android:name=".AlarmReceiver">
+            <intent-filter>
+                <action android:name="activity_app" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

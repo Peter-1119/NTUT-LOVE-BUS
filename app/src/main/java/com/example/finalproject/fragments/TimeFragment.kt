@@ -8,13 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.utils.widget.ImageFilterButton
 import androidx.fragment.app.Fragment
-import com.example.finalproject.BusInformation
-import com.example.finalproject.Favorite
-import com.example.finalproject.ImageDialog
-import com.example.finalproject.R
+import com.example.finalproject.*
 import java.util.*
 
 class TimeFragment : Fragment() {
@@ -101,13 +99,21 @@ class TimeFragment : Fragment() {
                 }
             }
         }
+        //顯示路線圖
         var btnDetail = view.findViewById<Button>(R.id.but_detail)
         btnDetail.setOnClickListener {
-
             var imageDialog = ImageDialog(view.context)
             imageDialog.setImage(busDetailImage[data?.getString("BusName")]).show()
             imageDialog.setCanceledOnTouchOutside(true)
             imageDialog.setCancelable(true)
+        }
+        //預約通知功能
+        var btnReservation = view.findViewById<Button>(R.id.but_reservation)
+        btnReservation.setOnClickListener {
+            val calender = Calendar.getInstance()
+            calender.add(Calendar.MINUTE,data?.getInt("TIME"))
+            add_alarm(view.context,calender)
+            setToast("成功預約提醒該公車!")
         }
     }
     fun updateFavorite(view:View,favoriteEd:Boolean){
@@ -120,5 +126,8 @@ class TimeFragment : Fragment() {
             btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
             textView3.text = "點擊愛心加入我的最愛"
         }
+    }
+    private fun setToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 }
