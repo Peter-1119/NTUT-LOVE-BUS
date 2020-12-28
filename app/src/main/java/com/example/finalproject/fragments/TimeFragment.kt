@@ -18,7 +18,7 @@ import com.example.finalproject.R
 import java.util.*
 
 class TimeFragment : Fragment() {
-    val busDetailImage = mapOf("202" to R.drawable.img202,
+    private val busDetailImage = mapOf("202" to R.drawable.img202,
             "262" to R.drawable.img262,
             "212" to R.drawable.img212,
             "299" to R.drawable.img299,
@@ -71,21 +71,38 @@ class TimeFragment : Fragment() {
         }
         val minStr=if (min<10) "0$min" else "$min"
         timeDeparture.text = String.format("若你想搭這班公車，請%d:%s出發", hour, minStr)
-        //view==view??
+
+
+
         var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
+        val c = BusInformation.dbrw.rawQuery("SELECT * FROM myTable WHERE busDir LIKE '${data?.getString("BusName")}\t${data?.getString("Dir")}'",null)
+        var favoriteEd = c.count>=1
+        updateFavorite(view,favoriteEd)
+
+
         btnFavorite.setOnClickListener {
-            try{
-                //新增一筆book與price資料進入myTable資料表
-                BusInformation.dbrw.execSQL("INSERT INTO myTable(busDir) VALUES(?)", arrayOf<Any?>("${data?.getString("BusName")}\t${data?.getString("Dir")}"))
-                Log.d("Test","新增公車${data?.getString("BusName")}   方向${data?.getString("Dir")}")
-            }catch (e: Exception){
-                Log.d("Test","新增失敗:$e")
+            if (favoriteEd){
+                try{
+                    BusInformation.dbrw.execSQL("DELETE FROM myTable WHERE busDir LIKE '${data?.getString("BusName")}\t${data?.getString("Dir")}'")
+                    Log.d("Test","刪除${data?.getString("BusName")}\t${data?.getString("Dir")}")
+                    favoriteEd=false
+                    updateFavorite(view,favoriteEd)
+                }catch (e: Exception){
+                    Log.d("Test","刪除失敗:$e")
+                }
+            }else{
+                try{
+                    BusInformation.dbrw.execSQL("INSERT INTO myTable(busDir) VALUES(?)", arrayOf<Any?>("${data?.getString("BusName")}\t${data?.getString("Dir")}"))
+                    Log.d("Test","新增公車${data?.getString("BusName")}   方向${data?.getString("Dir")}")
+                    favoriteEd=true
+                    updateFavorite(view,favoriteEd)
+                }catch (e: Exception){
+                    Log.d("Test","新增失敗:$e")
+                }
             }
         }
         var btnDetail = view.findViewById<Button>(R.id.but_detail)
         btnDetail.setOnClickListener {
-
-
 
             var imageDialog = ImageDialog(view.context)
             imageDialog.setImage(busDetailImage[data?.getString("BusName")]).show()
@@ -93,5 +110,15 @@ class TimeFragment : Fragment() {
             imageDialog.setCancelable(true)
         }
     }
-
+    fun updateFavorite(view:View,favoriteEd:Boolean){
+        var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
+        var textView3=view.findViewById<TextView>(R.id.textView3)
+        if (favoriteEd){
+            btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_24)
+            textView3.text = "已經加入我的最愛"
+        }else{
+            btnFavorite.setImageResource(R.drawable.ic_baseline_favorite_border_24)
+            textView3.text = "點擊愛心加入我的最愛"
+        }
+    }
 }
