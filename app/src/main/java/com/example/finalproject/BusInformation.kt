@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.example.finalproject.fragments.TimeFragment
 import com.example.finalproject.fragments.adapters.ViewPagerAdapter
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_bus_information.*
 
 class BusInformation : AppCompatActivity() {
     companion object {
-        public lateinit var dbrw: SQLiteDatabase
+        lateinit var dbrw: SQLiteDatabase
     }
     var pos = ""
     private var viewPageAdapter = ViewPagerAdapter(supportFragmentManager)
@@ -84,6 +85,13 @@ class BusInformation : AppCompatActivity() {
                     var intent = Intent(this@BusInformation,Favorite::class.java)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
+                }else if (bus=="456"){
+                    //產生Builder物件
+                    val builder = AlertDialog.Builder(view?.context!!)
+                    //呼叫setMessage方法設定顯示文字
+                    builder.setMessage("Hello")
+                    //顯示對話框
+                    builder.show()
                 }
                 Log.d("Tab","SpinnerSelected")
                 updateTab(stop,viewPageAdapter)

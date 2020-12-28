@@ -1,15 +1,11 @@
 package com.example.finalproject
 
-import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.finalproject.fragments.adapters.FavoriteListAdapter
-import com.example.finalproject.fragments.adapters.Item
 import kotlinx.android.synthetic.main.favorite_page.*
 
 class Favorite : AppCompatActivity() {
@@ -48,7 +44,7 @@ class Favorite : AppCompatActivity() {
         //宣告Adapter並連結ListView
         //adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, items)
         //listView.adapter = adapter
-        adapter=FavoriteListAdapter(R.layout.favorite_list,items1)
+        adapter= FavoriteListAdapter(R.layout.favorite_list,items1)
         listView.adapter=adapter
         refresh()
     }

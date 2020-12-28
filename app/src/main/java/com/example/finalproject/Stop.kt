@@ -58,10 +58,10 @@ class API() {
 
     //假想BussName，從站牌得到的公車列表
     var busNumber = 5 //數量
-    val busesName = arrayListOf("222", "72", "123", "456", "789") //名稱
+    val busesName = arrayListOf("222", "72", "123", "262", "212") //名稱
     //TODO:以stop(地點)決定公車數量和名稱
 
-
+    //TODO:刪掉，用圖表示
     fun getStopList(bus: String) {
         stopList.add("大我新舍")
         stopList.add("麟光站")

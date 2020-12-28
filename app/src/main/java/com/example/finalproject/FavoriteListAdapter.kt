@@ -1,13 +1,10 @@
-package com.example.finalproject.fragments.adapters
+package com.example.finalproject
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
-import com.example.finalproject.BusInformation
-import com.example.finalproject.Favorite
-import com.example.finalproject.R
 
 
 //Implement ViewHolder
