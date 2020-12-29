@@ -1,10 +1,10 @@
-package com.example.finalproject.fragments
+package com.example.finalproject
 
 import android.os.Build
+import android.os.Message
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import com.example.finalproject.Bus
+import com.example.finalproject.API.Companion.requestHandler
 import com.google.gson.Gson
 import com.squareup.okhttp.Callback
 import com.squareup.okhttp.OkHttpClient
@@ -14,9 +14,9 @@ import java.io.IOException
 import java.security.SignatureException
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.logging.Logger
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
+
 
 class SearchBus() {
 
@@ -94,10 +94,12 @@ class SearchBus() {
                         Log.d("API", "null")
                         return
                     } else {
-                        Log.d("API","Successful")
+                        Log.d("API", "Successful")
                         data = response.body()?.string()
                         println(data)
-                        return
+                        val msg = Message()
+                        msg.obj = data
+                        requestHandler.sendMessage(msg)
                     }
 //                    val data: Array<StopID> = Gson().fromJson(response.body().string(), Array<StopID>::class.java)
 //                    for(i in data.indices){

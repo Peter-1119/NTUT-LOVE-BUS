@@ -1,10 +1,11 @@
 package com.example.finalproject
 
 import android.os.Build
+import android.os.Handler
+import android.os.Message
 import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.finalproject.Stop.Companion.api
-import com.example.finalproject.fragments.SearchBus
 
 
 class Stop(var pos: String) {
@@ -54,6 +55,17 @@ class Bus(val stopList: List<String>, val name: String) {
 }
 
 class API(var pos: String) {
+    companion object{
+        val requestHandler: Handler = object : Handler() {
+            override fun handleMessage(msg: Message) {
+                super.handleMessage(msg);
+                var updateLists = msg.obj as String
+                Log.d("API","HandlerTest")
+                println(updateLists)
+            }
+        }
+    }
+
     var searchBus = SearchBus()
 
     //TODO:假想API
@@ -72,10 +84,10 @@ class API(var pos: String) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun updateTime(bus: String) {
 
-        Log.d("API","pos:"+pos)
+        Log.d("API", "pos:" + pos)
         searchBus.AddStopName(pos)
         searchBus.getStopsData()
-        Log.d("API", "數量"+searchBus.StopData?.size.toString())
+        Log.d("API", "數量" + searchBus.StopData?.size.toString())
 
         if (bus == "222") {
             t0 = (1..10).random()
