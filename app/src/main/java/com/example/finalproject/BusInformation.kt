@@ -24,7 +24,7 @@ class BusInformation : AppCompatActivity() {
     companion object {
         lateinit var dbrw: SQLiteDatabase
     }
-    var pos = "光華商場"
+    var pos = ""
     private var viewPageAdapter = ViewPagerAdapter(supportFragmentManager)
     private lateinit var stop: Stop
     override fun onCreate(savedInstanceState: Bundle?) {
