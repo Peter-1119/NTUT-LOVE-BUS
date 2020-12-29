@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.an_ntut_lovebus"
-        minSdkVersion 16
+        minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -45,4 +45,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.squareup.okhttp:okhttp:2.5.0'
+    implementation 'com.google.code.gson:gson:2.8.5'
 }

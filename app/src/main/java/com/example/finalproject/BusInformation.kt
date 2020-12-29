@@ -24,7 +24,7 @@ class BusInformation : AppCompatActivity() {
     companion object {
         lateinit var dbrw: SQLiteDatabase
     }
-    var pos = ""
+    var pos = "光華商場"
     private var viewPageAdapter = ViewPagerAdapter(supportFragmentManager)
     private lateinit var stop: Stop
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,12 +36,11 @@ class BusInformation : AppCompatActivity() {
         actionbar.setDisplayHomeAsUpEnabled(true)
         //取得資料庫實體
         dbrw = FavoriteSQLiteOpenHelper(this).writableDatabase
-        //TODO:測試用
-        FavoriteSQLiteOpenHelper(this).onUpgrade(dbrw,0,1)
+        //FavoriteSQLiteOpenHelper(this).onUpgrade(dbrw,0,1)
         //從地圖點站牌切換過來
         //TODO:之後用Intent + Bundle來取得站牌資訊stop的pos
 
-        pos = "行天宮"
+        pos = "忠孝"
         stop = Stop(pos)
         //Spinner
         val busesName: MutableList<String> = mutableListOf()
@@ -81,7 +80,7 @@ class BusInformation : AppCompatActivity() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val bus: String = parent?.getItemAtPosition(position).toString()
-                setToast(bus)
+                //setToast(bus)
                 if (bus=="123"){
                     var bundle = Bundle()
                     bundle.putString("key","This is String")
@@ -89,13 +88,6 @@ class BusInformation : AppCompatActivity() {
                     var intent = Intent(this@BusInformation,Favorite::class.java)
                     intent.putExtra("bundle",bundle)
                     startActivity(intent)
-                }else if (bus=="456"){
-                    //產生Builder物件
-                    val builder = AlertDialog.Builder(view?.context!!)
-                    //呼叫setMessage方法設定顯示文字
-                    builder.setMessage("Hello")
-                    //顯示對話框
-                    builder.show()
                 }
                 Log.d("Tab","SpinnerSelected")
                 updateTab(stop,viewPageAdapter)

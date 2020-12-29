@@ -1,19 +1,25 @@
 package com.example.finalproject
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import com.example.finalproject.Stop.Companion.api
+import com.example.finalproject.fragments.SearchBus
 
-class Stop(pos: String) {
-    private val stopPos: String = pos
-    private val api = API()
+
+class Stop(var pos: String) {
+    companion object{
+        lateinit var api:API
+    }
     val busList: MutableList<Bus> = mutableListOf()
 
-
     init {
+        api=API(pos)
         getBusList()
     }
 
     private fun getBusList() {
-        api.getStopList(stopPos)
+        api.getStopList(pos)
         for (i in 0 until api.busNumber) {
             val stopList = api.stopList
             val newBus = Bus(stopList, api.busesName[i])
@@ -36,7 +42,6 @@ class Stop(pos: String) {
 class Bus(val stopList: List<String>, val name: String) {
     var toStartTime = 0
     var toEndTime = 0
-    private val api = API()
 
     //TODO:busUpdate 更改成busUpdate_to、busUpdate_t1
     fun busUpdate() {
@@ -48,10 +53,11 @@ class Bus(val stopList: List<String>, val name: String) {
     }
 }
 
-class API() {
+class API(var pos: String) {
+    var searchBus = SearchBus()
+
     //TODO:假想API
-    var stop = ""
-    val stopList: MutableList<String> = mutableListOf()
+
 
     var t0 = 0
     var t1 = 0
@@ -61,20 +67,16 @@ class API() {
     val busesName = arrayListOf("222", "72", "123", "262", "212") //名稱
     //TODO:以stop(地點)決定公車數量和名稱
 
-    //TODO:刪掉，用圖表示
-    fun getStopList(bus: String) {
-        stopList.add("大我新舍")
-        stopList.add("麟光站")
-        stopList.add("黎忠市場")
-        stopList.add("富陽街口")
-        stopList.add("捷運六張犁站(和平)")
-        stopList.add("和平安和路口")
-        stopList.add("臥龍街")
-    }
-
     //取得該公車的去程時間和回程時間
     //TODO:API的時間表示確認
+    @RequiresApi(Build.VERSION_CODES.O)
     fun updateTime(bus: String) {
+
+        Log.d("API","pos:"+pos)
+        searchBus.AddStopName(pos)
+        searchBus.getStopsData()
+        Log.d("API", "數量"+searchBus.StopData?.size.toString())
+
         if (bus == "222") {
             t0 = (1..10).random()
             t1 = (1..10).random()
@@ -82,5 +84,14 @@ class API() {
             t0 = (1..10).random()
             t1 = (1..10).random()
         }
+    }
+
+    val stopList: MutableList<String> = mutableListOf()
+    fun getStopList(bus: String) {
+        stopList.add("台北科技大學站(忠孝)")
+        stopList.add("台北科技大學站(建國)")
+        stopList.add("忠孝新生捷運站")
+        stopList.add("光華商場")
+        stopList.add("懷生國宅")
     }
 }

@@ -62,13 +62,13 @@ class TimeFragment : Fragment() {
         val timeDeparture = view.findViewById<TextView>(R.id.time_departure)
         //超過時間範圍進未處理 MIN>60
         var hour = calender.get(Calendar.HOUR_OF_DAY)
-        var min = calender.get(Calendar.MINUTE)+ data!!.getInt("TIME")+10
+        var min = calender.get(Calendar.MINUTE)+ data!!.getInt("TIME")-3
         if (min>=60){
             hour++
             min -= 60
         }
         val minStr=if (min<10) "0$min" else "$min"
-        timeDeparture.text = String.format("若你想搭這班公車，請%d:%s出發", hour, minStr)
+        timeDeparture.text = String.format("若你想搭這班公車，請約%d:%s出發", hour, minStr)
 
 
 
