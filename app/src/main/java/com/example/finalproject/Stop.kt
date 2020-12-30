@@ -59,9 +59,13 @@ class API(var pos: String) {
         val requestHandler: Handler = object : Handler() {
             override fun handleMessage(msg: Message) {
                 super.handleMessage(msg);
-                var updateLists = msg.obj as String
+                var updateLists = msg.obj as Array<StopID>
                 Log.d("API","HandlerTest")
-                println(updateLists)
+                Log.d("API","數量${updateLists.size}")
+                for (i in updateLists.indices){
+                    if(updateLists[i].EstimateTime != 0)
+                        println("${updateLists[i].StopName?.Zh_tw}站車號：${updateLists[i].RouteName!!.Zh_tw};需再等候${updateLists[i].EstimateTime}")
+                }
             }
         }
     }
@@ -87,7 +91,6 @@ class API(var pos: String) {
         Log.d("API", "pos:" + pos)
         searchBus.AddStopName(pos)
         searchBus.getStopsData()
-        Log.d("API", "數量" + searchBus.StopData?.size.toString())
 
         if (bus == "222") {
             t0 = (1..10).random()

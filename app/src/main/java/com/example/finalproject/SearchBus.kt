@@ -24,7 +24,6 @@ class SearchBus() {
 
     //搜尋站牌清單
     val search_list: MutableList<String> = mutableListOf()
-
     //回傳特定巴士清單
     val bus_list: MutableList<String> = mutableListOf()
 
@@ -63,7 +62,7 @@ class SearchBus() {
 
     //查詢function
     @RequiresApi(Build.VERSION_CODES.O)
-    fun SearchAPI(url: String): String? {
+    fun SearchAPI(url: String){
         x_date = getServerTime()
         SignDate = "x-date: $x_date"
         //加密簽章
@@ -97,8 +96,9 @@ class SearchBus() {
                         Log.d("API", "Successful")
                         data = response.body()?.string()
                         println(data)
+                        StopData = Gson().fromJson(data, Array<StopID>::class.java)
                         val msg = Message()
-                        msg.obj = data
+                        msg.obj = StopData
                         requestHandler.sendMessage(msg)
                     }
 //                    val data: Array<StopID> = Gson().fromJson(response.body().string(), Array<StopID>::class.java)
@@ -118,14 +118,14 @@ class SearchBus() {
 //                Logger.getLogger(search_bus::class.java.name).warning("查詢失敗")
             }
         })
-        println("testData")
-        println(data)
-        return data
+//        println("testData")
+//        println(data)
+//        return data
     }
 
     //查詢站點的公車
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getStopsData(): Array<StopID>? {
+    fun getStopsData(){
         var StopNameList: String = ""
         var url: String = ""
         for ((i, content) in search_list.withIndex()) {
@@ -135,16 +135,17 @@ class SearchBus() {
                 StopNameList += " or contains(StopName/Zh_tw,'${content}')"
         }
         url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${StopNameList}"
-        Log.d("API", url)
-        val data = SearchAPI(url)
-        println(data)
-        StopData = Gson().fromJson(data, Array<StopID>::class.java)
-        return StopData
+        Log.d("API", "查詢$url")
+        SearchAPI(url)
+//        val data = SearchAPI(url)
+//        println(data)
+//        StopData = Gson().fromJson(data, Array<StopID>::class.java)
+//        return StopData
     }
 
     //查詢公車方向
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getDirectionsData(): Array<BusRoute>? {
+    fun getDirectionsData(){
         var BusIDList: String = ""
         for ((i, content) in bus_list.withIndex()) {
             if (i == 0)
@@ -153,10 +154,12 @@ class SearchBus() {
                 BusIDList += " or contains(RouteName/Zh_tw,'${content}')"
         }
         var url: String = "https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/Taipei?&\$top=30&\$format=JSON&\$filter=${BusIDList}"
-        val data = SearchAPI(url)
-        println(data)
-        BusData = Gson().fromJson(data, Array<BusRoute>::class.java)
-        return BusData
+        Log.d("API", "查詢$url")
+        SearchAPI(url)
+//        val data = SearchAPI(url)
+//        println(data)
+//        BusData = Gson().fromJson(data, Array<BusRoute>::class.java)
+//        return BusData
     }
 
     //查詢時間

@@ -40,7 +40,7 @@ class BusInformation : AppCompatActivity() {
         //從地圖點站牌切換過來
         //TODO:之後用Intent + Bundle來取得站牌資訊stop的pos
 
-        pos = "忠孝"
+        pos = "光華商場"
         stop = Stop(pos)
         //Spinner
         val busesName: MutableList<String> = mutableListOf()
@@ -90,7 +90,8 @@ class BusInformation : AppCompatActivity() {
                     startActivity(intent)
                 }
                 Log.d("Tab","SpinnerSelected")
-                updateTab(stop,viewPageAdapter)
+                //TODO:先刪掉，變成spineer選擇後先不更新，開啟後會呼叫API兩次
+                //updateTab(stop,viewPageAdapter)
             }
         }
         tabs!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
