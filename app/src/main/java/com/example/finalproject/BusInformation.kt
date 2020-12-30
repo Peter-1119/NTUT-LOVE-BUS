@@ -42,6 +42,15 @@ class BusInformation : AppCompatActivity() {
 
         pos = "光華商場"
         stop = Stop(pos)
+        var searchBus = SearchBus()
+        searchBus.AddStopName(pos)
+        searchBus.getStopsData()
+        Log.d("API","url (searchBus)${searchBus.url}")
+        SearchBus.instance.fetchStopData {
+            Log.d("API","print")
+            Log.d("API","print: ${it}")
+        }
+
         //Spinner
         val busesName: MutableList<String> = mutableListOf()
         for (i in stop.busList.indices) {

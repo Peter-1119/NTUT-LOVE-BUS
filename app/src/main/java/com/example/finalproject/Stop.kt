@@ -85,12 +85,10 @@ class API(var pos: String) {
 
     //取得該公車的去程時間和回程時間
     //TODO:API的時間表示確認
-    @RequiresApi(Build.VERSION_CODES.O)
     fun updateTime(bus: String) {
 
         Log.d("API", "pos:" + pos)
-        searchBus.AddStopName(pos)
-        searchBus.getStopsData()
+
 
         if (bus == "222") {
             t0 = (1..10).random()
