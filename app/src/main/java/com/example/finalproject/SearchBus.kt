@@ -111,7 +111,7 @@ class SearchBus {
         }
         url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${StopNameList}&\$orderby=RouteName/Zh_tw"
         SearchAPI(url, 0)
-
+        //TODO:時間調整測試
         sleep(2000)
 //        for (i in StopData!!.indices) {
 //            println("${StopData!![i].StopName?.Zh_tw}站;車號：${StopData!![i].RouteName!!.Zh_tw};需再等候${StopData!![i].EstimateTime}")

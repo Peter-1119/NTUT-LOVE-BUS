@@ -16,7 +16,6 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent) {
         val bData = intent.extras
         if (bData!!["title"] == "activity_app") {
-            //TODO:顯示通知
             Log.d("Test", "NOTIFICATION")
 
             var builder : Notification.Builder

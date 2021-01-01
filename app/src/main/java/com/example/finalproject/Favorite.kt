@@ -126,7 +126,6 @@ class Favorite : AppCompatActivity() {
         }
     }
     //Click Back Button
-    //TODO:Back Button Function
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

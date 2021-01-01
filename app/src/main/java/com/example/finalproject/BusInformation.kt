@@ -28,7 +28,6 @@ class BusInformation : AppCompatActivity() {
         actionbar.setDisplayHomeAsUpEnabled(true)
 
         //從地圖點站牌切換過來
-        //TODO:之後用Intent + Bundle來取得站牌資訊stop的pos
         pos = intent.getBundleExtra("bundle")!!.getString("Stop")!!
         stop = Stop(pos)
         //Spinner
@@ -73,7 +72,6 @@ class BusInformation : AppCompatActivity() {
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -99,7 +97,6 @@ class BusInformation : AppCompatActivity() {
 //        })
 
     }
-    //TODO:只針對目前所選擇TAB更新
     private fun updateTab(stop: Stop, viewPageAdapter: ViewPagerAdapter) {
         stop.busList[spinner.selectedItemId.toInt()].toStartDirData?.let {
             var tabStart = TimeFragment()
@@ -155,7 +152,6 @@ class BusInformation : AppCompatActivity() {
         }
     }
     //Click Back Button
-    //TODO:Back Button Function
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
