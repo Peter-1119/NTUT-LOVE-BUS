@@ -21,7 +21,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_bus_map1.*
-import kotlinx.android.synthetic.main.activity_show__weather2.*
 
 class BusStopFind : AppCompatActivity() , OnMapReadyCallback {
     private var traceOfMe: ArrayList<LatLng>? = null   //18add
@@ -31,6 +30,17 @@ class BusStopFind : AppCompatActivity() , OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bus_map1)
         showSpinner1()
+        button2.setOnClickListener {
+            if (spinner1.selectedItemId.toInt()!=0){
+                var bundle = Bundle()
+                Log.d("Test","select:${spinner1.selectedItem}")
+                bundle.putString("Stop","${spinner1.selectedItem}")
+                var intent = Intent(this,BusInformation::class.java)
+                intent.putExtra("bundle",bundle)
+                startActivity(intent)
+            }
+        }
+
 
         if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this,arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),REQUEST_PERMISSIONS)

@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.constraintlayout.utils.widget.ImageFilterButton
 import androidx.fragment.app.Fragment
 import com.example.finalproject.*
+import com.example.finalproject.MainActivity.Companion.dbrw
 import java.util.*
 
 class TimeFragment : Fragment() {
@@ -78,14 +79,14 @@ class TimeFragment : Fragment() {
 
         var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
         var busDirStop = "${data?.getString("BusName")} ${data?.getString("Dir")} ${data?.getString("Stop")}"
-        val c = TestMain.dbrw.rawQuery("SELECT * FROM myTable WHERE busDirStop LIKE '${busDirStop}'",null)
+        val c = dbrw.rawQuery("SELECT * FROM myTable WHERE busDirStop LIKE '${busDirStop}'",null)
         var favoriteEd = c.count>=1
         updateFavorite(view,favoriteEd)
 
         btnFavorite.setOnClickListener {
             if (favoriteEd){
                 try{
-                    TestMain.dbrw.execSQL("DELETE FROM myTable WHERE busDirStop LIKE '${busDirStop}'")
+                    dbrw.execSQL("DELETE FROM myTable WHERE busDirStop LIKE '${busDirStop}'")
                     Log.d("Test","刪除${busDirStop}")
                     favoriteEd=false
                     updateFavorite(view,favoriteEd)
@@ -98,7 +99,7 @@ class TimeFragment : Fragment() {
                     var dir=data.getInt("Dir")!!
                     var stop=data.getString("Stop")!!
                     var status=data.getString("StatusName")
-                    TestMain.dbrw.execSQL("INSERT INTO myTable(busDir,bus,dir,stop,status) VALUES(?)",
+                    dbrw.execSQL("INSERT INTO myTable(busDir,bus,dir,stop,status) VALUES(?)",
                             arrayOf<Any?>(busDirStop,bus,dir,stop,status))
                     Log.d("Test","新增${busDirStop}")
                     favoriteEd=true

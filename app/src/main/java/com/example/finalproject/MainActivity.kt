@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.sqlite.SQLiteDatabase
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
@@ -17,10 +18,13 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
-
+    companion object {
+        lateinit var dbrw: SQLiteDatabase
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        dbrw = FavoriteSQLiteOpenHelper(this).writableDatabase
 
         startService(Intent(this@MainActivity, MyService::class.java).putExtra("flag", true))
 
@@ -60,5 +64,10 @@ class MainActivity : AppCompatActivity() {
                 ), 1
             )
         })
+
+        btn_flavor.setOnClickListener {
+            var intent = Intent(this,Favorite::class.java)
+            startActivity(intent)
+        }
     }
 }

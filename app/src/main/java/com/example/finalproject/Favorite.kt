@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.finalproject.MainActivity.Companion.dbrw
 import kotlinx.android.synthetic.main.favorite_page.*
 
 class Favorite : AppCompatActivity() {
@@ -17,7 +18,7 @@ class Favorite : AppCompatActivity() {
             if (api){
                 updateData()
             }
-            val c = TestMain.dbrw.rawQuery("SELECT * FROM myTable",null)
+            val c = dbrw.rawQuery("SELECT * FROM myTable",null)
             //從第一筆開始輸出
             c.moveToFirst()
             //清空舊資料
@@ -35,7 +36,7 @@ class Favorite : AppCompatActivity() {
             c.close()
         }
         private fun updateData(){
-            val c = TestMain.dbrw.rawQuery("SELECT * FROM myTable",null)
+            val c = dbrw.rawQuery("SELECT * FROM myTable",null)
             val api=SearchBus()
             var filter = ""
             c.moveToFirst()
@@ -58,7 +59,7 @@ class Favorite : AppCompatActivity() {
                 val status = getStatus(data,stop, bus, dir)
                 try{
                     //更新book欄位為輸入字串（ed_book）的資料的price欄位數值
-                    TestMain.dbrw.execSQL("UPDATE myTable SET status = '${status}' WHERE stop LIKE '${stop}' AND bus LIKE '${bus}' AND dir LIKE '${dir}'")
+                    dbrw.execSQL("UPDATE myTable SET status = '${status}' WHERE stop LIKE '${stop}' AND bus LIKE '${bus}' AND dir LIKE '${dir}'")
                 }catch (e: Exception){
                     Log.d("Test","更新失敗:$e")
                 }

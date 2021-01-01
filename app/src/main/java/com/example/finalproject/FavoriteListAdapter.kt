@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.Button
 import android.widget.TextView
+import com.example.finalproject.MainActivity.Companion.dbrw
 
 
 //Implement ViewHolder
@@ -49,7 +50,7 @@ class FavoriteListAdapter constructor(private val layout: Int, private val data:
             try{
                 //從myTable資料表刪除book欄位為輸入字串（ed_book）的資料
                 var busDirStop="${data[position].busDir} ${data[position].stop}"
-                TestMain.dbrw.execSQL("DELETE FROM myTable WHERE busDirStop LIKE '${busDirStop}'")
+                dbrw.execSQL("DELETE FROM myTable WHERE busDirStop LIKE '${busDirStop}'")
                 Log.d("Test","刪除${busDirStop}")
             }catch (e: Exception){
                 Log.d("Test","刪除失敗:$e")
