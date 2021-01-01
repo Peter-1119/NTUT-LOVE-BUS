@@ -1,201 +1,154 @@
 package com.example.finalproject
 
 import android.os.Build
-import android.os.Message
 import android.util.Log
-import androidx.annotation.RequiresApi
-import com.example.finalproject.API.Companion.requestHandler
+import android.widget.Toast
 import com.google.gson.Gson
-import com.squareup.okhttp.*
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import com.squareup.okhttp.Callback
+import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Request
+import com.squareup.okhttp.Response
 import java.io.IOException
+import java.lang.Thread.sleep
 import java.security.SignatureException
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.logging.Logger
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
+class SearchBus {
 
-class SearchBus() {
+    var num: Int = 0
+
+    //搜尋站牌清單
+    val search_list: MutableList<String> = mutableListOf()
+
+    //回傳特定巴士清單
+    val bus_list: MutableList<String> = mutableListOf()
+
     //查詢設定
     val APPID: String = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
     val APPkey: String = "FFFFFFFF-FFFF-FFFF-FFFF-FFFFFFFFFFFF"
     var x_date: String = getServerTime()
-    var SignDate: String = "x-date: $x_date"
+    var SignDate: String = "x-date: " + x_date
     var Signature: String = ""
-    //搜尋站牌清單
-    val search_list: MutableList<String> = mutableListOf()
-    //查詢的資料
 
+    //查詢的資料
+    var BusData: Array<BusRoute>? = null
     var StopData: Array<StopID>? = null
-    companion object {
-        val instance: SearchBus by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            SearchBus()
-        }
-    }
-    var num: Int = 0
+
     //新增要查詢的站
     fun AddStopName(StopName: String) {
         num++
         search_list.add(StopName)
     }
+
+    //新增要查詢的巴士
+    fun AddBus(BusID: String) {
+        bus_list.add(BusID)
+    }
+
     //移除要查詢的站
     fun RemoveStopName(StopName: String) {
         num--
         search_list.remove(StopName)
     }
 
-
-    var BusData: Array<BusRoute>? = null
-    //回傳特定巴士清單
-    val bus_list: MutableList<String> = mutableListOf()
-
-    //新增要查詢的巴士
-    fun AddBus(BusID: String) {
-        bus_list.add(BusID)
-    }
     //移除要查詢的巴士
     fun RemoveBus(BusID: String) {
         bus_list.remove(BusID)
     }
-    public val client = OkHttpClient()
-    public val request = Request.Builder()
-    public lateinit var url:String
-    public fun fetchStopData(callback: (Array<StopID>?) -> Unit)  {
-        x_date = getServerTime()
-        SignDate = "x-date: $x_date"
-        try {
-            Signature = Signature_Compute(SignDate, APPkey)
-        } catch (e1: SignatureException) {
-            e1.printStackTrace()
-        }
-        val authorization: String = "hmac username=\"$APPID\", algorithm=\"hmac-sha1\", headers=\"x-date\", signature=\"$Signature\""
-        launch {
-            try {
-                // 製作 非同步方法（網路請求）
-                val deferred: Deferred<Response> = async {
-                    Log.d("API","url:${url}")
-                    val request = SearchBus.instance.request
-                            .url(url)
-                            .header("Authorization", authorization)
-                            .header("x-date", x_date)
-                            .build()
-                    return@async SearchBus.instance.client.newCall(request).execute()
-                }
-                val response = deferred.await()
-                if (!response.isSuccessful) {
-                    Log.d("API","!isSuccessful")
-                    callback(null)
-                }
-                val resData = response.body()?.string()
-                StopData = Gson().fromJson(resData, Array<StopID>::class.java)
-                Log.d("API","fetchStopData:${StopData}")
-                callback(StopData)
-            }catch (e: Exception) {
-                Log.d("API",e.toString())
-                callback(null)
-            }
-        }
-    }
+
     //查詢function
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun SearchAPI(url: String){
-        x_date = getServerTime()
-        SignDate = "x-date: $x_date"
+    fun SearchAPI(url: String, choice: Int) {
         //加密簽章
+        x_date = getServerTime()
+        SignDate = "x-date: " + x_date
         try {
             Signature = Signature_Compute(SignDate, APPkey)
         } catch (e1: SignatureException) {
-            e1.printStackTrace()
+            e1.printStackTrace();
         }
 
-        val authorization: String = "hmac username=\"$APPID\", algorithm=\"hmac-sha1\", headers=\"x-date\", signature=\"$Signature\""
+        val authorization: String = "hmac username=\"" + APPID + "\", algorithm=\"hmac-sha1\", headers=\"x-date\", signature=\"" + Signature + "\""
         var data: String? = ""
-
-
-        //Log.d("API",authorization)
-        //Log.d("API",x_date)
-
+        //println(SignDate)
+        //println(authorization)
+        //println(x_date)
+        val client = OkHttpClient()
         val request = Request.Builder()
                 .url(url)
                 .header("Authorization", authorization)
                 .header("x-date", x_date)
                 .build()
         client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(response: Response) {
-                //Log.d("API","TestResponse+${response.code()}")
-                if (response.code() == 200) {
-                    //Log.d("API","Hello200")
-                    if (response.body() == null) {
-                        Log.d("API", "null")
-                        return
-                    } else {
-                        Log.d("API", "Successful")
-                        data = response.body()?.string()
-                        println(data)
-                        StopData = Gson().fromJson(data, Array<StopID>::class.java)
-                        val msg = Message()
-                        msg.obj = StopData
-                        requestHandler.sendMessage(msg)
-                    }
-//                    val data: Array<StopID> = Gson().fromJson(response.body().string(), Array<StopID>::class.java)
-//                    for(i in data.indices){
-//                        if(data[i].EstimateTime != 0)
-//                            println("${data[i].StopName?.Zh_tw}站車號：${data[i].RouteName!!.Zh_tw};需再等候${data[i].EstimateTime}")
-//                    }
-                } else if (!response.isSuccessful)
-                    Log.e("伺服器錯誤", "${response.code()} ${response.message()}")
-                else
-                    Log.e("其他錯誤", "${response.code()} ${response.message()}")
+            override fun onResponse(response: Response?) {
+                if (response!!.code() == 200) {
+                    if (response.body() == null) return
+                    if (choice == 0) StopData = Gson().fromJson(response.body().string(), Array<StopID>::class.java)
+                    if (choice == 1) BusData = Gson().fromJson(response.body().string(), Array<BusRoute>::class.java)
+                } else {
+                    Log.d("API", "ERROR!response.code()=${response.code()}")
+                }
             }
 
             override fun onFailure(request: Request?, e: IOException?) {
-                Log.e("查詢失敗", e.toString())
-//                Toast.makeText(this, "查詢失敗", Toast.LENGTH_SHORT).show()
-//                Logger.getLogger(search_bus::class.java.name).warning("查詢失敗")
+                println("查詢失敗")
             }
         })
-//        println("testData")
-//        println(data)
-//        return data
     }
 
     //查詢站點的公車
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getStopsData(){
+    fun getStopsData(): Array<StopID>? {
         var StopNameList: String = ""
+        var url: String = ""
         for ((i, content) in search_list.withIndex()) {
             if (i == 0)
                 StopNameList += "contains(StopName/Zh_tw,'${content}')"
             else
                 StopNameList += " or contains(StopName/Zh_tw,'${content}')"
         }
-        url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${StopNameList}"
-        Log.d("API", "查詢$url")
+        url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${StopNameList}&\$orderby=RouteName/Zh_tw"
+        SearchAPI(url, 0)
+        //TODO:時間調整測試
+        sleep(2000)
+//        for (i in StopData!!.indices) {
+//            println("${StopData!![i].StopName?.Zh_tw}站;車號：${StopData!![i].RouteName!!.Zh_tw};需再等候${StopData!![i].EstimateTime}")
+//        }
+        return StopData
+    }
 
-//        val data = SearchAPI(url)
-//        println(data)
-//        StopData = Gson().fromJson(data, Array<StopID>::class.java)
-//        return StopData
+    fun getStopDataByStr(filter: String): Array<StopID>? {
+        var url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${filter}&\$orderby=RouteName/Zh_tw"
+        SearchAPI(url, 0)
+        sleep(2000)
+        return StopData
     }
 
     //查詢公車方向
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getDirectionsData(){
+    fun getDirectionsData(): Array<BusRoute>? {
         var BusIDList: String = ""
         for ((i, content) in bus_list.withIndex()) {
             if (i == 0)
-                BusIDList += "contains(RouteName/Zh_tw,'${content}')"
+                BusIDList += "RouteName/Zh_tw eq '${content}'"
             else
-                BusIDList += " or contains(RouteName/Zh_tw,'${content}')"
+                BusIDList += " or RouteName/Zh_tw eq '${content}'"
+//            if(i == 0)
+//                BusIDList += "contains(RouteName/Zh_tw,'${content}')"
+//            else
+//                BusIDList += " or contains(RouteName/Zh_tw,'${content}')"
         }
-        url = "https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/Taipei?&\$top=30&\$format=JSON&\$filter=${BusIDList}"
-//        val data = SearchAPI(url)
-//        println(data)
-//        BusData = Gson().fromJson(data, Array<BusRoute>::class.java)
-//        return BusData
+        var url: String = "https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/Taipei?&\$top=30&\$format=JSON&\$select=DepartureStopNameZh,DestinationStopNameZh,RouteName&\$filter=${BusIDList}&\$orderby=RouteName/Zh_tw"
+        Log.d("API", "url:${url}")
+        SearchAPI(url, 1)
+
+        sleep(2000)
+//        for (i in BusData!!.indices) {
+//            println("起站是${BusData!![i].DepartureStopNameZh}站;終點站是：${BusData!![i].DestinationStopNameZh};")
+//        }
+
+        return BusData
     }
 
     //查詢時間
@@ -207,7 +160,6 @@ class SearchBus() {
     }
 
     //加密金要
-    @RequiresApi(Build.VERSION_CODES.O)
     @Throws(SignatureException::class)
     fun Signature_Compute(xData: String, AppKey: String): String {
         return try {

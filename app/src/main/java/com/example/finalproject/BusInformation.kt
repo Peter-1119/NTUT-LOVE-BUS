@@ -1,8 +1,5 @@
 package com.example.finalproject
 
-import android.app.NotificationManager
-import android.content.Context
-import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.os.Bundle
 import android.util.Log
@@ -12,18 +9,13 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import com.example.finalproject.fragments.TimeFragment
 import com.example.finalproject.fragments.adapters.ViewPagerAdapter
-import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_bus_information.*
 
 class BusInformation : AppCompatActivity() {
-    companion object {
-        lateinit var dbrw: SQLiteDatabase
-    }
+
     var pos = ""
     private var viewPageAdapter = ViewPagerAdapter(supportFragmentManager)
     private lateinit var stop: Stop
@@ -34,23 +26,10 @@ class BusInformation : AppCompatActivity() {
         val actionbar = supportActionBar
         actionbar!!.title = "公車動態介面"
         actionbar.setDisplayHomeAsUpEnabled(true)
-        //取得資料庫實體
-        dbrw = FavoriteSQLiteOpenHelper(this).writableDatabase
-        //FavoriteSQLiteOpenHelper(this).onUpgrade(dbrw,0,1)
+
         //從地圖點站牌切換過來
-        //TODO:之後用Intent + Bundle來取得站牌資訊stop的pos
-
-        pos = "光華商場"
+        pos = intent.getBundleExtra("bundle")!!.getString("Stop")!!
         stop = Stop(pos)
-        var searchBus = SearchBus()
-        searchBus.AddStopName(pos)
-        searchBus.getStopsData()
-        Log.d("API","url (searchBus)${searchBus.url}")
-        SearchBus.instance.fetchStopData {
-            Log.d("API","print")
-            Log.d("API","print: ${it}")
-        }
-
         //Spinner
         val busesName: MutableList<String> = mutableListOf()
         for (i in stop.busList.indices) {
@@ -60,90 +39,98 @@ class BusInformation : AppCompatActivity() {
         spinner.adapter = adapter
 
         //Tab的顯示頁面設置
-        var tabStart = TimeFragment()
-        val bundleStart = Bundle()
-        bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
-        bundleStart.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
-        bundleStart.putString("Dir","往起點")
-        tabStart.arguments = bundleStart
-        //TODO:往[API拿地點]
-        viewPageAdapter.addFragment(tabStart, "往起點")
-
-        //終點
-        var tabEnd = TimeFragment()
-        val bundleEnd = Bundle()
-        bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
-        bundleEnd.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
-        bundleEnd.putString("Dir","往終點")
-        tabEnd.arguments = bundleEnd
-        viewPageAdapter.addFragment(tabEnd, "往終點")
-
+        stop.busList[spinner.selectedItemId.toInt()].toStartDirData?.let {
+            Log.d("Test", "WHY?start:${stop.busList[spinner.selectedItemId.toInt()].toStartDirData}")
+            var tabStart = TimeFragment()
+            val bundleStart = Bundle()
+            bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
+            bundleStart.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 0))
+            bundleStart.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
+            bundleStart.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].startName)
+            bundleStart.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 0))
+            bundleStart.putString("Stop",pos)
+            bundleStart.putInt("Dir",0)
+            tabStart.arguments = bundleStart
+            viewPageAdapter.addFragment(tabStart, stop.busList[spinner.selectedItemId.toInt()].startName)
+        }
+        stop.busList[spinner.selectedItemId.toInt()].toEndDirData?.let {
+            Log.d("Test", "WHY?end:${stop.busList[spinner.selectedItemId.toInt()].toEndDirData}")
+            var tabEnd = TimeFragment()
+            val bundleEnd = Bundle()
+            bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
+            bundleEnd.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 1))
+            bundleEnd.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
+            bundleEnd.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].endName)
+            bundleEnd.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 1))
+            bundleEnd.putString("Stop",pos)
+            bundleEnd.putInt("Dir",1)
+            tabEnd.arguments = bundleEnd
+            viewPageAdapter.addFragment(tabEnd, stop.busList[spinner.selectedItemId.toInt()].endName)
+        }
         viewPager.adapter = viewPageAdapter
         tabs.setupWithViewPager(viewPager)
 
-
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                TODO("Not yet implemented")
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val bus: String = parent?.getItemAtPosition(position).toString()
                 //setToast(bus)
-                if (bus=="123"){
-                    var bundle = Bundle()
-                    bundle.putString("key","This is String")
-                    bundle.putInt("key1",1)
-                    var intent = Intent(this@BusInformation,Favorite::class.java)
-                    intent.putExtra("bundle",bundle)
-                    startActivity(intent)
-                }
-                Log.d("Tab","SpinnerSelected")
-                //TODO:先刪掉，變成spineer選擇後先不更新，開啟後會呼叫API兩次
-                //updateTab(stop,viewPageAdapter)
+                setToast("請稍後，更新資料中")
+                Log.d("Tab", "SpinnerSelected")
+                updateTab(stop, viewPageAdapter)
             }
         }
-        tabs!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                Log.d("Tab","Change Tab")
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-                Log.d("Tab","onTabUnselected")
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                Log.d("Tab","onTabReselected")
-            }
-        })
+//        tabs!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+//            override fun onTabSelected(tab: TabLayout.Tab?) {
+//                Log.d("Tab","Change Tab")
+//            }
+//
+//            override fun onTabUnselected(tab: TabLayout.Tab?) {
+//                Log.d("Tab","onTabUnselected")
+//            }
+//
+//            override fun onTabReselected(tab: TabLayout.Tab?) {
+//                Log.d("Tab","onTabReselected")
+//            }
+//        })
 
     }
-    //TODO:只針對目前所選擇TAB更新
-    private fun updateTab(stop:Stop,viewPageAdapter:ViewPagerAdapter) {
-        var tabStart = TimeFragment()
-        val bundleStart = Bundle()
-        bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
-        bundleStart.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
-        bundleStart.putString("Dir","往起點")
-        tabStart.arguments = bundleStart
-        //TODO:往[API拿地點]
-        viewPageAdapter.changeFragment(0,tabStart, "往起點")
-
-        //終點
-        var tabEnd = TimeFragment()
-        val bundleEnd = Bundle()
-        bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
-        bundleEnd.putString("BusName",stop.busList[spinner.selectedItemId.toInt()].name)
-        bundleEnd.putString("Dir","往終點")
-        tabEnd.arguments = bundleEnd
-        viewPageAdapter.changeFragment(1,tabEnd, "往終點")
+    private fun updateTab(stop: Stop, viewPageAdapter: ViewPagerAdapter) {
+        stop.busList[spinner.selectedItemId.toInt()].toStartDirData?.let {
+            var tabStart = TimeFragment()
+            val bundleStart = Bundle()
+            bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
+            bundleStart.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 0))
+            bundleStart.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
+            bundleStart.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].startName)
+            bundleStart.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 0))
+            bundleStart.putString("Stop",pos)
+            bundleStart.putInt("Dir",0)
+            tabStart.arguments = bundleStart
+            viewPageAdapter.changeFragment(0, tabStart, stop.busList[spinner.selectedItemId.toInt()].startName)
+        }
+        stop.busList[spinner.selectedItemId.toInt()].toEndDirData?.let {
+            var tabEnd = TimeFragment()
+            val bundleEnd = Bundle()
+            bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
+            bundleEnd.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 1))
+            bundleEnd.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
+            bundleEnd.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].endName)
+            bundleEnd.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 1))
+            bundleEnd.putString("Stop",pos)
+            bundleEnd.putInt("Dir",1)
+            tabEnd.arguments = bundleEnd
+            viewPageAdapter.changeFragment(1, tabEnd, stop.busList[spinner.selectedItemId.toInt()].endName)
+        }
 
         viewPager.adapter = viewPageAdapter
         tabs.setupWithViewPager(viewPager)
     }
 
     private fun setToast(text: String) {
-        Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     //Create Refresh Button
@@ -156,15 +143,15 @@ class BusInformation : AppCompatActivity() {
         println(item.itemId)
         return when (item.itemId) {
             R.id.refresh -> {
-                Log.d("Tab","Refresh")
-                updateTab(stop,viewPageAdapter)
+                Log.d("Tab", "Refresh")
+                stop.updateBusList()
+                updateTab(stop, viewPageAdapter)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
     //Click Back Button
-    //TODO:Back Button Function
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

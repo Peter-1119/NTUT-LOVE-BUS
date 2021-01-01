@@ -10,15 +10,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Finalproject">
-        <activity android:name=".BusInformation">
+
+        <activity android:name=".TestMain">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".BusInformation">
+        </activity>
+
         <activity android:name=".Favorite">
         </activity>
+
         <!-- 當鬧鈴時間到達時要執行的程式 -->
         <receiver android:name=".AlarmReceiver">
             <intent-filter>

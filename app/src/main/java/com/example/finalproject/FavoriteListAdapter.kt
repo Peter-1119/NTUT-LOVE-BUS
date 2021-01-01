@@ -44,16 +44,17 @@ class FavoriteListAdapter constructor(private val layout: Int, private val data:
         //根據position顯示圖片與名稱
         holder.busDir.text=data[position].busDir
         holder.stop.text=data[position].stop
-        holder.remainTime.text=data[position].remainTime.toString()
+        holder.remainTime.text=data[position].status
         holder.but.setOnClickListener {
             try{
                 //從myTable資料表刪除book欄位為輸入字串（ed_book）的資料
-                BusInformation.dbrw.execSQL("DELETE FROM myTable WHERE busDir LIKE '${holder.busDir.text}'")
-                Log.d("Test","刪除${holder.busDir.text}")
+                var busDirStop="${data[position].busDir} ${data[position].stop}"
+                TestMain.dbrw.execSQL("DELETE FROM myTable WHERE busDirStop LIKE '${busDirStop}'")
+                Log.d("Test","刪除${busDirStop}")
             }catch (e: Exception){
                 Log.d("Test","刪除失敗:$e")
             }finally {
-                Favorite.refresh()
+                Favorite.refresh(false)
             }
         }
         return view
@@ -63,5 +64,5 @@ class FavoriteListAdapter constructor(private val layout: Int, private val data:
 data class Item(
         val busDir: String,
         val stop:String,
-        val remainTime:Int,
+        val status:String,
 )
