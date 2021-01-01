@@ -27,9 +27,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCIG8fDzcpQG1aMpnivHFTJXsXSqWcwYPE" /> <!-- google map金鑰 -->
-        <activity android:name=".BusMap2" />
-        <activity android:name=".BusMap1" />
-        <activity android:name=".search_bus" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
