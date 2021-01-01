@@ -1,29 +1,40 @@
 package com.example.finalproject
 
-import android.animation.AnimatorSet
-import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.IntentFilter
+import android.os.AsyncTask
 import android.os.Bundle
-import android.widget.Button
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import pl.droidsonroids.gif.GifDrawable
 import pl.droidsonroids.gif.GifImageView
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        startService(Intent(this@MainActivity, MyService::class.java).putExtra("flag", true))
+
         btn_map.setOnClickListener{
-            var intent = Intent(this, search_bus::class.java)
+            var intent = Intent(this, BusStopFind::class.java)
             startActivity(intent)
         }
-        val translationY = ObjectAnimator.ofFloat(findViewById(R.id.textView2), "translationY", 100f, 100f)
-        val ra = ObjectAnimator.ofFloat(findViewById(R.id.textView2), "rotation", 0f, 720.0f)
-        val animatorSet = AnimatorSet() //组合动画
-        animatorSet.playTogether(translationY, ra) //设置动画
-        animatorSet.duration = 2000
-        animatorSet.start()
+
+        btn_weather.setOnClickListener {
+            var intent = Intent(this, Show_Weather2::class.java)
+            startActivity(intent)
+        }
+
+        //設置動態介面
         val ImageView = findViewById<GifImageView>(R.id.imageView7)
         try {
             val gifDrawable = GifDrawable(resources, R.drawable.test2)
@@ -32,5 +43,22 @@ class MainActivity : AppCompatActivity() {
             e.printStackTrace()
         }
 
+        //顯示天氣圖示
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .add(R.id.container, WeatherFragment2())
+                .commit()
+        }
+
+
+        //切換天氣頁面
+        btn_weather.setOnClickListener(View.OnClickListener {
+            startActivityForResult(
+                Intent(
+                    this,
+                    Show_Weather2::class.java
+                ), 1
+            )
+        })
     }
 }

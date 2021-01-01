@@ -3,6 +3,7 @@ package com.example.finalproject
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -18,17 +19,19 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.activity_bus_map1.*
+import kotlinx.android.synthetic.main.activity_show__weather2.*
 
-class BusMap1 : AppCompatActivity() , OnMapReadyCallback {
-    private val REQUEST_PERMISSIONS=1
-    private lateinit var mMap: GoogleMap
+class BusStopFind : AppCompatActivity() , OnMapReadyCallback {
+    private var traceOfMe: ArrayList<LatLng>? = null   //18add
+    private val REQUEST_PERMISSIONS=1 //18add
+    private lateinit var mMap: GoogleMap //18add
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bus_map1)
+        showSpinner1()
+
         if(ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)!= PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this,arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),REQUEST_PERMISSIONS)
         else{
@@ -40,10 +43,13 @@ class BusMap1 : AppCompatActivity() , OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        //change to page2
-        switchMain2.setOnClickListener {
-            startActivityForResult(Intent(this,BusMap2::class.java),1)
+        btn_backMain.setOnClickListener {
+            var intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
+
+
+
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
@@ -117,7 +123,7 @@ class BusMap1 : AppCompatActivity() , OnMapReadyCallback {
 
     fun showSpinner1(){
         val lunch = arrayListOf("請選擇站牌(點選回到北科大)","台北科技大學站(忠孝)","台北科技大學站(建國)","忠孝新生捷運站","光華商場","懷生國宅")
-        val adapter= ArrayAdapter(this@BusMap1,android.R.layout.simple_spinner_item,lunch)
+        val adapter= ArrayAdapter(this@BusStopFind,android.R.layout.simple_spinner_item,lunch)
 
         spinner1.adapter=adapter
 
@@ -156,7 +162,7 @@ class BusMap1 : AppCompatActivity() , OnMapReadyCallback {
 
             //若無選擇spinner內的元件
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                Toast.makeText(this@BusMap1,"尚未選擇", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@BusStopFind,"尚未選擇", Toast.LENGTH_LONG).show()
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }
@@ -185,7 +191,6 @@ class BusMap1 : AppCompatActivity() , OnMapReadyCallback {
                 Log.d("myTag", "Security Exception, no location available")
             }
         if(oriLocation != null) {
-
             //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(oriLocation!!.latitude, oriLocation!!.longitude), 20.0f))
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.043226,121.534565), 17.0f))
         }
@@ -200,6 +205,19 @@ class BusMap1 : AppCompatActivity() , OnMapReadyCallback {
             //如果人移動鏡頭則追蹤人的去向
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude, location.longitude),18.0f))
             //mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.043226,121.534565), 17.0f))
+
+            //繪畫出步行軌跡
+            if (traceOfMe == null) {
+                traceOfMe = ArrayList<LatLng>()
+            }
+            traceOfMe!!.add(LatLng(location.latitude, location.longitude))
+            val polylineOpt = PolylineOptions()
+            for (latlng in traceOfMe!!) {
+                polylineOpt.add(latlng)
+            }
+            polylineOpt.color(Color.RED)
+            val line: Polyline = mMap.addPolyline(polylineOpt)
+            line.setWidth(5f)
         }
     }
 
