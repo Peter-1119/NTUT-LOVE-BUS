@@ -1,12 +1,3 @@
 <resources>
     <string name="app_name">NTUT_LoveBus</string>
-
-    <string-array name="lunch">
-        <item>222</item>
-        <item>72</item>
-        <item>123</item>
-        <item>456</item>
-        <item>666</item>
-    </string-array>
-
 </resources>

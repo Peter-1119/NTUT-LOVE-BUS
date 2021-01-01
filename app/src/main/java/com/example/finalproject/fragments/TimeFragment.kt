@@ -56,33 +56,37 @@ class TimeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val data = arguments
-        val time = view.findViewById<TextView>(R.id.time_bus_remain)
-        time.text = String.format("%d分鐘後到", data?.getInt("TIME"))
-        val calender = Calendar.getInstance()
-        val timeDeparture = view.findViewById<TextView>(R.id.time_departure)
-        //超過時間範圍進未處理 MIN>60
-        var hour = calender.get(Calendar.HOUR_OF_DAY)
-        var min = calender.get(Calendar.MINUTE)+ data!!.getInt("TIME")-3
-        if (min>=60){
-            hour++
-            min -= 60
+        val status = view.findViewById<TextView>(R.id.time_bus_remain)
+        status.text=data?.getString("StatusName")
+
+        var timeDeparture = view.findViewById<TextView>(R.id.time_departure)
+        if (data!!.getInt("Status")!=0){
+            timeDeparture.text = ""
+        }else{
+            val calender = Calendar.getInstance()
+            val timeDeparture = view.findViewById<TextView>(R.id.time_departure)
+            //超過時間範圍進未處理 MIN>60
+            var hour = calender.get(Calendar.HOUR_OF_DAY)
+            var min = calender.get(Calendar.MINUTE)+ data!!.getInt("TIME")-3
+            if (min>=60){
+                hour++
+                min -= 60
+            }
+            val minStr=if (min<10) "0$min" else "$min"
+            timeDeparture.text = String.format("若你想搭這班公車，請約%d:%s出發", hour, minStr)
         }
-        val minStr=if (min<10) "0$min" else "$min"
-        timeDeparture.text = String.format("若你想搭這班公車，請約%d:%s出發", hour, minStr)
-
-
 
         var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
-        val c = BusInformation.dbrw.rawQuery("SELECT * FROM myTable WHERE busDir LIKE '${data?.getString("BusName")}\t${data?.getString("Dir")}'",null)
+        var busDirStop = "${data?.getString("BusName")} ${data?.getString("Dir")} ${data?.getString("Stop")}"
+        val c = TestMain.dbrw.rawQuery("SELECT * FROM myTable WHERE busDirStop LIKE '${busDirStop}'",null)
         var favoriteEd = c.count>=1
         updateFavorite(view,favoriteEd)
-
 
         btnFavorite.setOnClickListener {
             if (favoriteEd){
                 try{
-                    BusInformation.dbrw.execSQL("DELETE FROM myTable WHERE busDir LIKE '${data?.getString("BusName")}\t${data?.getString("Dir")}'")
-                    Log.d("Test","刪除${data?.getString("BusName")}\t${data?.getString("Dir")}")
+                    TestMain.dbrw.execSQL("DELETE FROM myTable WHERE busDirStop LIKE '${busDirStop}'")
+                    Log.d("Test","刪除${busDirStop}")
                     favoriteEd=false
                     updateFavorite(view,favoriteEd)
                 }catch (e: Exception){
@@ -90,8 +94,13 @@ class TimeFragment : Fragment() {
                 }
             }else{
                 try{
-                    BusInformation.dbrw.execSQL("INSERT INTO myTable(busDir) VALUES(?)", arrayOf<Any?>("${data?.getString("BusName")}\t${data?.getString("Dir")}"))
-                    Log.d("Test","新增公車${data?.getString("BusName")}   方向${data?.getString("Dir")}")
+                    var bus = data.getString("BusName")!!
+                    var dir=data.getInt("Dir")!!
+                    var stop=data.getString("Stop")!!
+                    var status=data.getString("StatusName")
+                    TestMain.dbrw.execSQL("INSERT INTO myTable(busDir,bus,dir,stop,status) VALUES(?)",
+                            arrayOf<Any?>(busDirStop,bus,dir,stop,status))
+                    Log.d("Test","新增${busDirStop}")
                     favoriteEd=true
                     updateFavorite(view,favoriteEd)
                 }catch (e: Exception){
@@ -109,13 +118,19 @@ class TimeFragment : Fragment() {
         }
         //預約通知功能
         var btnReservation = view.findViewById<Button>(R.id.but_reservation)
-        btnReservation.setOnClickListener {
-            val calender = Calendar.getInstance()
-            calender.add(Calendar.MINUTE,data?.getInt("TIME"))
-            add_alarm(view.context,calender)
-            setToast("成功預約提醒該公車!")
+        if (data!!.getInt("Status")!=0)
+            btnReservation.visibility = View.INVISIBLE
+        else{
+            btnReservation.visibility = View.VISIBLE
+            btnReservation.setOnClickListener {
+                val calender = Calendar.getInstance()
+                calender.add(Calendar.MINUTE,data?.getInt("TIME"))
+                add_alarm(view.context,calender)
+                setToast("成功預約提醒該公車!")
+            }
         }
     }
+
     fun updateFavorite(view:View,favoriteEd:Boolean){
         var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
         var textView3=view.findViewById<TextView>(R.id.textView3)
