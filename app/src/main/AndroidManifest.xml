@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.finalproject">
-
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 取使用者網路權限 -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- 取使用者粗略位置 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /><!-- 取使用者位置 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 取使用者網路權限 -->
 
     <application
         android:allowBackup="true"
@@ -35,6 +34,23 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+        <activity android:name=".TestMain">
+        </activity>
+
+        <activity android:name=".BusInformation">
+        </activity>
+
+        <activity android:name=".Favorite">
+        </activity>
+
+        <!-- 當鬧鈴時間到達時要執行的程式 -->
+        <receiver android:name=".AlarmReceiver">
+            <intent-filter>
+                <action android:name="activity_app" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
