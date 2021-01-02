@@ -132,7 +132,7 @@ class BusStopFind : AppCompatActivity() , OnMapReadyCallback {
     }
 
     fun showSpinner1(){
-        val lunch = arrayListOf("請選擇站牌(點選回到北科大)","台北科技大學站(忠孝)","台北科技大學站(建國)","忠孝新生捷運站","光華商場","懷生國宅")
+        val lunch = arrayListOf("請選擇站牌(點選回到北科大)","臺北科技大學(忠孝)","臺北科技大學(建國)","捷運忠孝新生站","光華商場","懷生國宅")
         val adapter= ArrayAdapter(this@BusStopFind,android.R.layout.simple_spinner_item,lunch)
 
         spinner1.adapter=adapter

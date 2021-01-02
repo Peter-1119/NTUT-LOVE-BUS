@@ -78,7 +78,7 @@ class TimeFragment : Fragment() {
         }
 
         var btnFavorite=view.findViewById<ImageFilterButton>(R.id.btn_favorite)
-        var busDirStop = "${data?.getString("BusName")} ${data?.getString("Dir")} ${data?.getString("Stop")}"
+        var busDirStop = "${data?.getString("BusName")} ${data?.getInt("Dir")} ${data?.getString("Stop")}"
         val c = dbrw.rawQuery("SELECT * FROM myTable WHERE busDirStop LIKE '${busDirStop}'",null)
         var favoriteEd = c.count>=1
         updateFavorite(view,favoriteEd)
@@ -99,8 +99,9 @@ class TimeFragment : Fragment() {
                     var dir=data.getInt("Dir")!!
                     var stop=data.getString("Stop")!!
                     var status=data.getString("StatusName")
-                    dbrw.execSQL("INSERT INTO myTable(busDir,bus,dir,stop,status) VALUES(?)",
-                            arrayOf<Any?>(busDirStop,bus,dir,stop,status))
+                    var dirName = data.getString("DirName")
+                    dbrw.execSQL("INSERT INTO myTable(busDirStop,bus,dir,stop,status,dirName) VALUES(?,?,?,?,?,?)",
+                            arrayOf<Any?>(busDirStop,bus,dir,stop,status,dirName))
                     Log.d("Test","新增${busDirStop}")
                     favoriteEd=true
                     updateFavorite(view,favoriteEd)

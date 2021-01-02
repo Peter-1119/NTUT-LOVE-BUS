@@ -30,4 +30,8 @@ class ViewPagerAdapter(supportFragmentManger: FragmentManager) :
         mFragmentList[index] = fragment
         mFragmentTitleList[index] = title
     }
+    fun removeFragment() {
+        mFragmentList.clear()
+        mFragmentTitleList.clear()
+    }
 }

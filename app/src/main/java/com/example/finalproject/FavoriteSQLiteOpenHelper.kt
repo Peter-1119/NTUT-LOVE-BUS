@@ -11,7 +11,7 @@ class FavoriteSQLiteOpenHelper (context: Context): SQLiteOpenHelper(context, nam
     }
 
     override fun onCreate(db: SQLiteDatabase) {
-        db.execSQL("CREATE TABLE myTable(busDirStop text PRIMARY KEY,bus text,dir integer,stop text,status text)")
+        db.execSQL("CREATE TABLE myTable(busDirStop text PRIMARY KEY,bus text,dir integer,stop text,status text,dirName text)")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {

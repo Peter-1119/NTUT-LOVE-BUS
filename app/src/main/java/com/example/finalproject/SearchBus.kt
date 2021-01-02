@@ -110,6 +110,7 @@ class SearchBus {
                 StopNameList += " or contains(StopName/Zh_tw,'${content}')"
         }
         url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${StopNameList}&\$orderby=RouteName/Zh_tw"
+        Log.d("API", "getStopsData url:${url}")
         SearchAPI(url, 0)
         //TODO:時間調整測試
         sleep(2000)
@@ -121,6 +122,7 @@ class SearchBus {
 
     fun getStopDataByStr(filter: String): Array<StopID>? {
         var url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${filter}&\$orderby=RouteName/Zh_tw"
+        Log.d("API", "getStopDataByStr url:${url}")
         SearchAPI(url, 0)
         sleep(2000)
         return StopData
@@ -140,7 +142,7 @@ class SearchBus {
 //                BusIDList += " or contains(RouteName/Zh_tw,'${content}')"
         }
         var url: String = "https://ptx.transportdata.tw/MOTC/v2/Bus/Route/City/Taipei?&\$top=30&\$format=JSON&\$select=DepartureStopNameZh,DestinationStopNameZh,RouteName&\$filter=${BusIDList}&\$orderby=RouteName/Zh_tw"
-        Log.d("API", "url:${url}")
+        Log.d("API", "getDirectionsData url:${url}")
         SearchAPI(url, 1)
 
         sleep(2000)

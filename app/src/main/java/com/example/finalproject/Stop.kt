@@ -13,6 +13,8 @@ class Stop(var stop: String) {
     }
 
     private fun createBusList() {
+        Log.d("Test","stop:${stop}")
+
         searchBus.AddStopName(stop)
         val stopData = searchBus.getStopsData()
         searchBus.RemoveStopName(stop)

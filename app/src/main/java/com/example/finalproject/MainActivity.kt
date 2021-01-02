@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         dbrw = FavoriteSQLiteOpenHelper(this).writableDatabase
-
+        //FavoriteSQLiteOpenHelper(this).onUpgrade(dbrw,0,1)
         startService(Intent(this@MainActivity, MyService::class.java).putExtra("flag", true))
 
         btn_map.setOnClickListener{

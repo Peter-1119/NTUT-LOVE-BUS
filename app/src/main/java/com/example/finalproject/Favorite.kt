@@ -1,9 +1,11 @@
 package com.example.finalproject
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.finalproject.MainActivity.Companion.dbrw
@@ -13,9 +15,11 @@ class Favorite : AppCompatActivity() {
     companion object{
         private val items1 = ArrayList<Item>()
         private lateinit var adapter: FavoriteListAdapter
+        lateinit  var appContext: Context
         fun refresh(api:Boolean){
             Log.d("Tab","Refresh")
             if (api){
+                Toast.makeText(appContext, "請稍後，更新資料中", Toast.LENGTH_LONG).show()
                 updateData()
             }
             val c = dbrw.rawQuery("SELECT * FROM myTable",null)
@@ -24,7 +28,7 @@ class Favorite : AppCompatActivity() {
             //清空舊資料
             items1.clear()
             for (i in 0 until c.count) {
-                var busDir = "${c.getString(1)} ${c.getString(2)}"
+                var busDir = "${c.getString(1)}\n${c.getString(6)}"
                 items1.add(Item(busDir,c.getString(3),c.getString(4)))
                 //items1.add("公車:${c.getString(0)}")
                 //移動到下一筆
@@ -37,6 +41,7 @@ class Favorite : AppCompatActivity() {
         }
         private fun updateData(){
             val c = dbrw.rawQuery("SELECT * FROM myTable",null)
+            Log.d("Test","c.count:${c.count}")
             val api=SearchBus()
             var filter = ""
             c.moveToFirst()
@@ -48,21 +53,28 @@ class Favorite : AppCompatActivity() {
                     filter += "(StopName/Zh_tw eq '${stop}' and RouteName/Zh_tw eq '${bus}' and Direction eq ${dir})"
                 else
                     filter += " or (StopName/Zh_tw eq '${stop}' and RouteName/Zh_tw eq '${bus}' and Direction eq ${dir})"
+                c.moveToNext()
             }
-            val data=api.getStopDataByStr(filter)!!
-
-            c.moveToFirst()
-            for (i in 0 until c.count) {
-                val stop = c.getString(3)!!
-                val bus=c.getString(1)!!
-                val dir = c.getInt(2)!!
-                val status = getStatus(data,stop, bus, dir)
-                try{
-                    //更新book欄位為輸入字串（ed_book）的資料的price欄位數值
-                    dbrw.execSQL("UPDATE myTable SET status = '${status}' WHERE stop LIKE '${stop}' AND bus LIKE '${bus}' AND dir LIKE '${dir}'")
-                }catch (e: Exception){
-                    Log.d("Test","更新失敗:$e")
+            Log.d("Test","filter:${filter}")
+            if (c.count!=0){
+                val data=api.getStopDataByStr(filter)!!
+                c.moveToFirst()
+                for (i in 0 until c.count) {
+                    val stop = c.getString(3)!!
+                    val bus=c.getString(1)!!
+                    val dir = c.getInt(2)!!
+                    val status = getStatus(data,stop, bus, dir)
+                    try{
+                        //更新book欄位為輸入字串（ed_book）的資料的price欄位數值
+                        dbrw.execSQL("UPDATE myTable SET status = '${status}' WHERE stop LIKE '${stop}' AND bus LIKE '${bus}' AND dir LIKE '${dir}'")
+                    }catch (e: Exception){
+                        Log.d("Test","更新失敗:$e")
+                    }
+                    c.moveToNext()
                 }
+            }
+            else{
+                Log.d("Test","我的最愛無資料")
             }
         }
         private fun getStatus(data:Array<StopID>,stop:String,bus:String,dir:Int):String{
@@ -103,6 +115,8 @@ class Favorite : AppCompatActivity() {
         actionbar!!.title = "我的最愛"
         actionbar.setDisplayHomeAsUpEnabled(true)
 
+        Favorite.appContext=applicationContext
+
         //宣告Adapter並連結ListView
         //adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, items)
         //listView.adapter = adapter
@@ -131,7 +145,7 @@ class Favorite : AppCompatActivity() {
         onBackPressed()
         return true
     }
-    private fun showToast(text: String) =
-            Toast.makeText(this,text, Toast.LENGTH_LONG).show()
+    private fun setToast(text: String) {
 
+    }
 }

@@ -38,38 +38,6 @@ class BusInformation : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, busesName)
         spinner.adapter = adapter
 
-        //Tab的顯示頁面設置
-        stop.busList[spinner.selectedItemId.toInt()].toStartDirData?.let {
-            Log.d("Test", "WHY?start:${stop.busList[spinner.selectedItemId.toInt()].toStartDirData}")
-            var tabStart = TimeFragment()
-            val bundleStart = Bundle()
-            bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
-            bundleStart.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 0))
-            bundleStart.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
-            bundleStart.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].startName)
-            bundleStart.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 0))
-            bundleStart.putString("Stop",pos)
-            bundleStart.putInt("Dir",0)
-            tabStart.arguments = bundleStart
-            viewPageAdapter.addFragment(tabStart, stop.busList[spinner.selectedItemId.toInt()].startName)
-        }
-        stop.busList[spinner.selectedItemId.toInt()].toEndDirData?.let {
-            Log.d("Test", "WHY?end:${stop.busList[spinner.selectedItemId.toInt()].toEndDirData}")
-            var tabEnd = TimeFragment()
-            val bundleEnd = Bundle()
-            bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
-            bundleEnd.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 1))
-            bundleEnd.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
-            bundleEnd.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].endName)
-            bundleEnd.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 1))
-            bundleEnd.putString("Stop",pos)
-            bundleEnd.putInt("Dir",1)
-            tabEnd.arguments = bundleEnd
-            viewPageAdapter.addFragment(tabEnd, stop.busList[spinner.selectedItemId.toInt()].endName)
-        }
-        viewPager.adapter = viewPageAdapter
-        tabs.setupWithViewPager(viewPager)
-
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
@@ -77,39 +45,26 @@ class BusInformation : AppCompatActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val bus: String = parent?.getItemAtPosition(position).toString()
                 //setToast(bus)
-                setToast("請稍後，更新資料中")
+                //創建畫面時會自己更新一次
                 Log.d("Tab", "SpinnerSelected")
                 updateTab(stop, viewPageAdapter)
             }
         }
-//        tabs!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-//                Log.d("Tab","Change Tab")
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//                Log.d("Tab","onTabUnselected")
-//            }
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//                Log.d("Tab","onTabReselected")
-//            }
-//        })
-
     }
     private fun updateTab(stop: Stop, viewPageAdapter: ViewPagerAdapter) {
+        viewPageAdapter.removeFragment()
         stop.busList[spinner.selectedItemId.toInt()].toStartDirData?.let {
             var tabStart = TimeFragment()
             val bundleStart = Bundle()
             bundleStart.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 0))
             bundleStart.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 0))
             bundleStart.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
-            bundleStart.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].startName)
+            bundleStart.putString("DirName", stop.busList[spinner.selectedItemId.toInt()].startName)
             bundleStart.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 0))
             bundleStart.putString("Stop",pos)
             bundleStart.putInt("Dir",0)
             tabStart.arguments = bundleStart
-            viewPageAdapter.changeFragment(0, tabStart, stop.busList[spinner.selectedItemId.toInt()].startName)
+            viewPageAdapter.addFragment(tabStart, stop.busList[spinner.selectedItemId.toInt()].startName)
         }
         stop.busList[spinner.selectedItemId.toInt()].toEndDirData?.let {
             var tabEnd = TimeFragment()
@@ -117,12 +72,12 @@ class BusInformation : AppCompatActivity() {
             bundleEnd.putInt("TIME", stop.getTime(spinner.selectedItemId.toInt(), 1))
             bundleEnd.putString("StatusName", stop.getStatusName(spinner.selectedItemId.toInt(), 1))
             bundleEnd.putString("BusName", stop.busList[spinner.selectedItemId.toInt()].name)
-            bundleEnd.putString("Dir", stop.busList[spinner.selectedItemId.toInt()].endName)
+            bundleEnd.putString("DirName", stop.busList[spinner.selectedItemId.toInt()].endName)
             bundleEnd.putInt("Status", stop.getStatus(spinner.selectedItemId.toInt(), 1))
             bundleEnd.putString("Stop",pos)
             bundleEnd.putInt("Dir",1)
             tabEnd.arguments = bundleEnd
-            viewPageAdapter.changeFragment(1, tabEnd, stop.busList[spinner.selectedItemId.toInt()].endName)
+            viewPageAdapter.addFragment(tabEnd, stop.busList[spinner.selectedItemId.toInt()].endName)
         }
 
         viewPager.adapter = viewPageAdapter
@@ -144,6 +99,7 @@ class BusInformation : AppCompatActivity() {
         return when (item.itemId) {
             R.id.refresh -> {
                 Log.d("Tab", "Refresh")
+                setToast("請稍後，更新資料中")
                 stop.updateBusList()
                 updateTab(stop, viewPageAdapter)
                 true
