@@ -28,9 +28,11 @@ class Favorite : AppCompatActivity() {
             //清空舊資料
             items1.clear()
             for (i in 0 until c.count) {
-                var busDir = "${c.getString(1)}\n${c.getString(6)}"
-                items1.add(Item(busDir,c.getString(3),c.getString(4)))
-                //items1.add("公車:${c.getString(0)}")
+                val busDirName = "${c.getString(1)}\n${c.getString(5)}"
+                val stop = c.getString(3)
+                val status = c.getString(4)
+                val busDirStop = "${c.getString(1)} ${c.getString(2)} $stop"
+                items1.add(Item(busDirName,stop, status, busDirStop))
                 //移動到下一筆
                 c.moveToNext()
             }

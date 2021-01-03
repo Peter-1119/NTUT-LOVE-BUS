@@ -17,7 +17,8 @@ import com.example.finalproject.MainActivity.Companion.dbrw
 import java.util.*
 
 class TimeFragment : Fragment() {
-    private val busDetailImage = mapOf("202" to R.drawable.img202,
+    private val busDetailImage = mapOf(
+            "202" to R.drawable.img202,
             "262" to R.drawable.img262,
             "212" to R.drawable.img212,
             "299" to R.drawable.img299,
@@ -126,7 +127,7 @@ class TimeFragment : Fragment() {
             btnReservation.visibility = View.VISIBLE
             btnReservation.setOnClickListener {
                 val calender = Calendar.getInstance()
-                calender.add(Calendar.MINUTE,data?.getInt("TIME"))
+                calender.add(Calendar.MINUTE,data?.getInt("TIME")-1)
                 add_alarm(view.context,calender)
                 setToast("成功預約提醒該公車!")
             }

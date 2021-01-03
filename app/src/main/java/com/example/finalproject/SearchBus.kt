@@ -113,7 +113,7 @@ class SearchBus {
         Log.d("API", "getStopsData url:${url}")
         SearchAPI(url, 0)
         //TODO:時間調整測試
-        sleep(2000)
+        sleep(1000)
 //        for (i in StopData!!.indices) {
 //            println("${StopData!![i].StopName?.Zh_tw}站;車號：${StopData!![i].RouteName!!.Zh_tw};需再等候${StopData!![i].EstimateTime}")
 //        }
@@ -124,7 +124,7 @@ class SearchBus {
         var url = "https://ptx.transportdata.tw/MOTC/v2/Bus/EstimatedTimeOfArrival/City/Taipei?\$top=50&\$format=JSON&\$filter=${filter}&\$orderby=RouteName/Zh_tw"
         Log.d("API", "getStopDataByStr url:${url}")
         SearchAPI(url, 0)
-        sleep(2000)
+        sleep(1000)
         return StopData
     }
 
@@ -145,7 +145,7 @@ class SearchBus {
         Log.d("API", "getDirectionsData url:${url}")
         SearchAPI(url, 1)
 
-        sleep(2000)
+        sleep(1000)
 //        for (i in BusData!!.indices) {
 //            println("起站是${BusData!![i].DepartureStopNameZh}站;終點站是：${BusData!![i].DestinationStopNameZh};")
 //        }

@@ -19,10 +19,12 @@ class Stop(var stop: String) {
         val stopData = searchBus.getStopsData()
         searchBus.RemoveStopName(stop)
         numberBuses = stopData?.size!!
+
         val busesNameSet = mutableSetOf<String>()
         for (i in stopData.indices) {
             busesNameSet.add(stopData[i].RouteName!!.Zh_tw!!)
         }
+
         for (name in busesNameSet) {
             searchBus.AddBus(name)
         }
