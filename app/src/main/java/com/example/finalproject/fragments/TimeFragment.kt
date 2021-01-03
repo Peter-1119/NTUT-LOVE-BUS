@@ -42,7 +42,19 @@ class TimeFragment : Fragment() {
             "676" to R.drawable.img676,
             "680" to R.drawable.img680,
             "1550" to R.drawable.img1550,
-            "松江新生幹線" to R.drawable.img232)
+            "松江新生幹線" to R.drawable.img232,
+            "202區" to R.drawable.img202local,
+            "212夜" to R.drawable.img212yeah,
+            "212直" to R.drawable.img212dirct,
+            "262區" to R.drawable.img262,
+            "605新台五" to R.drawable.img605new5,
+            "203" to R.drawable.img203,
+            "214直" to R.drawable.img214dirct,
+            "226" to R.drawable.img226,
+            "254" to R.drawable.img254,
+            "280直" to R.drawable.img280direct,
+            "41" to R.drawable.img41,
+            "669" to R.drawable.img669)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
