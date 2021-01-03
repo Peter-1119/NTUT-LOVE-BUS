@@ -51,7 +51,7 @@ class WeatherFragment2 : Fragment() {
                 m = MyService().m
                 s = MyService().s
                 //TODO:Accessibility content change on non-UI thread.
-                //time.text = String.format("目前時刻\n%02d:%02d:%02d",h, m, s)
+                time.text = String.format("目前時刻\n%02d:%02d:%02d",h, m, s)
                 Thread.sleep(1000)
             }
         }.start()

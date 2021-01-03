@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         dbrw = FavoriteSQLiteOpenHelper(this).writableDatabase
         //FavoriteSQLiteOpenHelper(this).onUpgrade(dbrw,0,1)
         startService(Intent(this@MainActivity, MyService::class.java).putExtra("flag", true))

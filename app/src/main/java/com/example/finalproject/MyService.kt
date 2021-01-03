@@ -37,6 +37,8 @@ class MyService : Service() {
                     if (m >= 60) {
                         m = 0
                         h++
+                        if(h >= 24)
+                            h = 0
                     }
                 }
                 val intent = Intent("MyMessage")
