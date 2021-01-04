@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/busDir"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="222 往終點"
+        android:textColor="#1E3C21"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="植福宮"
+        android:textColor="#1E3C21"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/remainTime"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/mBtn"
+        android:layout_alignBottom="@+id/mBtn"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_toStartOf="@+id/mBtn"
+        android:layout_toLeftOf="@+id/mBtn"
+        android:text="即將進站"
+        android:textColor="#1E3C21"
+        android:textSize="20dp" />
+    <Button
+        android:id="@+id/mBtn"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="刪除"
+        />
+</RelativeLayout>

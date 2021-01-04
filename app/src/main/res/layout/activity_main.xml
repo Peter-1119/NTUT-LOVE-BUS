@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="418dp"
+        android:layout_height="741dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@android:drawable/screen_background_light" />
+
+    <FrameLayout
+        android:background="@drawable/drawable"
+        android:id="@+id/container"
+        android:textColor="#FFFFFF"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.example.weather.WeatherActivity"
+        >
+
+        <TextView
+            android:id="@+id/main"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="120dp"
+            android:textColor="#223360"
+
+            android:textSize="50sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="250dp"
+            android:layout_marginTop="200dp"
+            android:textColor="#223360"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/topic"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="50dp"
+            android:layout_marginTop="5dp"
+            android:text="北科Love公車"
+            android:textAlignment="center"
+            android:textColor="#223360"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="142dp"
+            android:layout_height="74dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="125dp"
+            android:text="目前時刻\n00:00:00"
+            android:textSize="30dp" />
+
+
+    </FrameLayout>
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/imageView7"
+        android:layout_width="419dp"
+        android:layout_height="349dp"
+        android:layout_marginTop="392dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/test2" />
+
+    <Button
+        android:id="@+id/btn_map"
+        android:layout_width="199dp"
+        android:layout_height="195dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="210dp"
+        android:background="@drawable/round_button"
+        android:text="學校周邊地圖\n公車動態查詢"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="#CEDF6E"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView9"
+        android:layout_width="75dp"
+        android:layout_height="275dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="15dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/imageView7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/school" />
+
+    <Button
+        android:id="@+id/btn_flavor"
+        android:layout_width="151dp"
+        android:layout_height="143dp"
+        android:layout_marginStart="176dp"
+        android:layout_marginTop="150dp"
+        android:background="@drawable/round_button2"
+        android:text="我的最愛站牌"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="#EC9B9B"
+        app:layout_constraintStart_toStartOf="@+id/btn_map"
+        app:layout_constraintTop_toTopOf="@+id/btn_map" />
+
+
+    <Button
+        android:id="@+id/btn_weather"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/round_button3"
+        android:text="今日天氣資訊"
+        android:textColor="#000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:backgroundTint="#8FC87F"
+        app:layout_constraintStart_toStartOf="@+id/btn_map"
+        app:layout_constraintTop_toBottomOf="@+id/btn_map" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
