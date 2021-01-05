@@ -150,16 +150,16 @@ class BusStopFind : AppCompatActivity() , OnMapReadyCallback {
                 val spinner_val = position //追蹤使用者搜尋哪個spinner 藉此知道我們要顯示甚麼 表顯該有的功能
                 //選擇spinner內的元件
                 if (spinner_val == 1 ){
-                    tv_showBusNum.setText("202\t262\tt212\n299\t600\t605\n953\t忠孝幹線")
+                    tv_showBusNum.setText("202\t262\t212\n299\t600\t605\n953\t忠孝幹線")
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.04226382928084,121.53444170951843), 19.0f))
                 } else if (spinner_val == 2) {
                     tv_showBusNum.setText("298\t919\t紅57")
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.043551,121.536293), 19.0f))
                 } else if (spinner_val == 3) {
-                    tv_showBusNum.setText("72\t   109\t  214\n222\t280\t505\n643\t668\t672\n675\t676\t680\n1550\t 松江新生幹線")
+                    tv_showBusNum.setText("72\t 109\t 214\n222\t280\t505\n643\t668\t672\n675\t676\t680\n1550\t 松江新生幹線")
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.041961,121.532928), 19.0f))
                 } else if (spinner_val == 4) {
-                    tv_showBusNum.setText("72\t   109\t  214\n222\t280\t505\n643\t668\t672\n675\t676\t680\n1550\t 松江新生幹線")
+                    tv_showBusNum.setText("72\t 109\t 214\n222\t280\t505\n643\t668\t672\n675\t676\t680\n1550\t 松江新生幹線")
                     mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(25.044708,121.532934), 19.0f))
                 } else if (spinner_val == 5) {
                     tv_showBusNum.setText("669")

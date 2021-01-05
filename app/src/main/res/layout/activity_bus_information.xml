@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".BusInformation">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="500dp"
+        android:layout_height="750dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/findbus" />
 
     <TextView
         android:id="@+id/textView"
@@ -13,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginTop="-20dp"
-        android:text="選擇公車號碼"
+        android:text="選擇公車號碼👉"
+        android:textColor="#1E3C21"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@id/spinner"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/spinner" />

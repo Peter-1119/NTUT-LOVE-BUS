@@ -16,11 +16,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginStart="30dp"
-            android:layout_marginLeft="30dp"
             android:layout_marginTop="100dp"
             android:text="3分鐘後到"
-            android:textColor="@android:color/black"
-            android:textSize="20sp"
+            android:textColor="#1E3C21"
+            android:textSize="22sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -39,6 +39,7 @@
             android:id="@+id/btn_favorite"
             android:layout_width="50dp"
             android:layout_height="50dp"
+            android:background="#CBDC4444"
             android:src="@drawable/ic_baseline_favorite_border_24"
             app:layout_constraintBottom_toBottomOf="@+id/textView3"
             app:layout_constraintEnd_toStartOf="@+id/textView3"
@@ -51,6 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="若你想搭這班公車，請12:31出發"
+            android:textColor="#1E3C21"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/time_bus_remain" />
@@ -71,6 +74,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="加入我的最愛"
+            android:textColor="#711818"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btn_favorite"
             app:layout_constraintTop_toBottomOf="@+id/time_departure" />
