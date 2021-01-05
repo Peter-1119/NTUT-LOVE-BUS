@@ -13,7 +13,7 @@ class MyService : Service() {
     var flag = false
     val calender = Calendar.getInstance()
     //超過時間範圍進未處理 MIN>60
-    var h = calender.get(Calendar.HOUR_OF_DAY) + 8
+    var h = calender.get(Calendar.HOUR_OF_DAY)
     var m = calender.get(Calendar.MINUTE)
     var s = calender.get(Calendar.SECOND)
 
